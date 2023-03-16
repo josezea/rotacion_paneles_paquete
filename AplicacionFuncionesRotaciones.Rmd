@@ -31,10 +31,6 @@ library(SamplingCoordination)
 ```
 
 
-```{r, warning=FALSE, message=FALSE}
-library(SamplingCoordination)
-```
-
 
 Podemos generar los paneles básicos más usuales en la litaratura de rotación de paneles, los siguientes sin embargo son insumos para paneles más complejos que se establezcan mensual o trimestralmente:
 
@@ -42,7 +38,7 @@ Podemos generar los paneles básicos más usuales en la litaratura de rotación 
 ```{r}
 panelBasico484 <- Basic_rotating_panels(4, 8, 4) 
 panelBasico444 <- Basic_rotating_panels(4, 4, 4) 
-panelBasico222 <- Basic_rotating_panels(2, 2, 2) 
+panelBasico222 <- Basic_rotating_panels(2, 2, 2) # ENEMDU
 panelBasico200 <- Basic_rotating_panels(2, 0, 0) 
 panelBasico400 <- Basic_rotating_panels(4, 0, 0) 
 panelBasico500 <- Basic_rotating_panels(5, 0, 0) 
@@ -53,7 +49,21 @@ panelBasico600 <- Basic_rotating_panels(6, 0, 0)
 
 Para establecer un período y una letra que represente un mes al interior de un trimestre:
 
+Revisar parametro C
 ```{r}
+
+panel222Completo <- cbind(SamplingCoordination::Rotating_panels(2, 2, 2, 10*4, "A"),
+SamplingCoordination::Rotating_panels(2, 2, 2, 10*4, "B"), 
+SamplingCoordination::Rotating_panels(2, 2, 2, 10*4, "C"))
+
+panel222Completo <- cbind(SamplingCoordination::Rotating_panels(2, 2, 2, 10*4, "A"),
+SamplingCoordination::Rotating_panels(2, 2, 2, 10*4, "C"), 
+SamplingCoordination::Rotating_panels(2, 2, 2, 10*4, "E"),
+SamplingCoordination::Rotating_panels(2, 2, 2, 10*4, "G")
+)
+
+
+
 panel484 <- SamplingCoordination::Rotating_panels(4, 8, 4, 20, "A") #  5 años y 4 trimestres
 panel500_13A <- panelesRotativos(5, 0, 0, 13*4) # 13 años p
 panel500_10 <- panelesRotativos(5, 0, 0, 40, "F")
@@ -70,9 +80,18 @@ datos_estrato <-  readRDS("Datos.Rds")
 
 
 ```{r}
-resultado <- SamplingCoordination::Panel_sampling(DF = Datos, stratum_column = "id_estrato",
+
+num_trimestres <- 52 # 13 * 4
+paneles <- cbind(Rotating_panels(5, 0, 0, num_trimestres), 
+                 Rotating_panels(5, 0, 0, num_trimestres,"F"),
+                 Rotating_panels(5, 0, 0, num_trimestres, "K"))
+#paneles %>% as.matrix() %>% as.vector() %>% unique() %>% length()
+
+resultado <- SamplingCoordination::Panel_sampling(DF = datos_estrato,
+                                                  stratum_column = "id_estrato",
                                      PSU_column = "id_upm", panels = paneles,
-                                     PSU_stratum_size = 2294, PSU_stratum_sample_size = 109) 
+                                     PSU_stratum_size = 2294, #nrow(datos_estrato) 
+                                     PSU_stratum_sample_size = 109) 
 ```
 
 
