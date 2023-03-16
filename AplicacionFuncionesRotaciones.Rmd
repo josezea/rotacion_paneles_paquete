@@ -1,0 +1,79 @@
+---
+title: "Uso de algoritmosde selección con coordinación positiva y negativa"
+author: "José Fernando Zea"
+date: "2023-03-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Introducción
+
+
+El paquete SamplingCoordination dispone de algoritmos de selección de coordinación positiva y negativa para algoritmos ampliamente usados en encuestas de hogares y de negocios como el muestreo aleatorio simple, el Poisson y el de Pareto.
+Se ilustra en el presente documento diferentes ejemplos de escala pequeña y otros de una escala más realista.
+
+# Instalación del paquete
+
+Para instalar el paquete realice las siguientes pasos:
+
+
+1. Instale el paquete remotes
+2. Ejecute la siguiente lineas: 
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+#library(remotes)
+#install_github("psirusteam/SamplingCoordination")
+library(SamplingCoordination)
+```
+
+
+```{r, warning=FALSE, message=FALSE}
+library(SamplingCoordination)
+```
+
+
+Podemos generar los paneles básicos más usuales en la litaratura de rotación de paneles, los siguientes sin embargo son insumos para paneles más complejos que se establezcan mensual o trimestralmente:
+
+
+```{r}
+panelBasico484 <- Basic_rotating_panels(4, 8, 4) 
+panelBasico444 <- Basic_rotating_panels(4, 4, 4) 
+panelBasico222 <- Basic_rotating_panels(2, 2, 2) 
+panelBasico200 <- Basic_rotating_panels(2, 0, 0) 
+panelBasico400 <- Basic_rotating_panels(4, 0, 0) 
+panelBasico500 <- Basic_rotating_panels(5, 0, 0) 
+panelBasico600 <- Basic_rotating_panels(6, 0, 0) 
+```
+
+
+
+Para establecer un período y una letra que represente un mes al interior de un trimestre:
+
+```{r}
+panel484 <- SamplingCoordination::Rotating_panels(4, 8, 4, 20, "A") #  5 años y 4 trimestres
+panel500_13A <- panelesRotativos(5, 0, 0, 13*4) # 13 años p
+panel500_10 <- panelesRotativos(5, 0, 0, 40, "F")
+panel3 <- panelesRotativos(5, 0, 0, 40, "K")
+```
+
+
+# Muestra panel
+Leemos una base de ejemplos: 
+
+```{r}
+datos_estrato <-  readRDS("Datos.Rds")
+```
+
+
+```{r}
+resultado2 <- SamplingCoordination::Panel_sampling(DF = Datos, stratum_column = "id_estrato",
+                                     PSU_column = "id_upm", panels = paneles,
+                                     PSU_stratum_size = 2294, PSU_stratum_sample_size = 109) 
+```
+
+
+
