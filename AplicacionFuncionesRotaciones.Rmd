@@ -1,5 +1,5 @@
 ---
-title: "Uso de algoritmosde selección con coordinación positiva y negativa"
+title: "Uso de algoritmos de rotacións"
 author: "José Fernando Zea"
 date: "2023-03-01"
 output: html_document
@@ -70,7 +70,7 @@ datos_estrato <-  readRDS("Datos.Rds")
 
 
 ```{r}
-resultado2 <- SamplingCoordination::Panel_sampling(DF = Datos, stratum_column = "id_estrato",
+resultado <- SamplingCoordination::Panel_sampling(DF = Datos, stratum_column = "id_estrato",
                                      PSU_column = "id_upm", panels = paneles,
                                      PSU_stratum_size = 2294, PSU_stratum_sample_size = 109) 
 ```
